@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "declaration": true,
+    "declarationDir": ".",
+    "esModuleInterop": true
+  },
+  "include": ["invariant.ts"],
+  "exclude": ["node_modules"]
+}

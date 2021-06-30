@@ -1,0 +1,6 @@
+# Dependencies
+node_modules
+
+# Build
+invariant.js
+invariant.d.ts
