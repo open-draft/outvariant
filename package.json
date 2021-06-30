@@ -2,16 +2,20 @@
   "name": "outvariant",
   "version": "1.0.0",
   "description": "Yet another TypeScript implementation of invariant.",
-  "main": "invariant.js",
-  "typings": "invariant.d.ts",
+  "main": "index.js",
+  "typings": "index.d.ts",
   "author": "Artem Zakharchenko",
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "clean": "rimraf invariant.js invariant.d.ts",
+    "clean": "rimraf index.js index.d.ts",
     "build": "yarn clean && tsc",
     "prepublishOnly": "yarn test && yarn build"
   },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "jest": "^27.0.6",

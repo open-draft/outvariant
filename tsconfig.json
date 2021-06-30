@@ -5,6 +5,6 @@
     "declarationDir": ".",
     "esModuleInterop": true
   },
-  "include": ["invariant.ts"],
+  "include": ["index.ts"],
   "exclude": ["node_modules"]
 }

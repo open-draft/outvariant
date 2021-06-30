@@ -1,4 +1,4 @@
-import { invariant, InvariantError } from './invariant'
+import { invariant, InvariantError } from '.'
 
 it('does not throw any exceptions if the predicate is truthy', () => {
   expect(() => invariant(1, 'Error')).not.toThrow()
