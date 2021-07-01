@@ -1,7 +1,7 @@
 {
   "name": "outvariant",
   "version": "1.0.2",
-  "description": "Yet another TypeScript implementation of invariant.",
+  "description": "Type-safe implementation of invariant with positionals.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "author": "Artem Zakharchenko",
@@ -14,6 +14,12 @@
   },
   "files": [
     "lib"
+  ],
+  "keywords": [
+    "invariant",
+    "outvariant",
+    "exception",
+    "positional"
   ],
   "devDependencies": {
     "@types/jest": "^26.0.23",
