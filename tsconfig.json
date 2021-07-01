@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "strict": true,
+    "outDir": "lib",
     "declaration": true,
-    "declarationDir": ".",
+    "declarationDir": "lib",
     "esModuleInterop": true
   },
-  "include": ["index.ts"],
+  "include": ["src/index.ts"],
   "exclude": ["node_modules"]
 }
