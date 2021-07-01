@@ -13,8 +13,7 @@
     "prepublishOnly": "yarn test && yarn build"
   },
   "files": [
-    "index.js",
-    "index.d.ts"
+    "lib"
   ],
   "devDependencies": {
     "@types/jest": "^26.0.23",
