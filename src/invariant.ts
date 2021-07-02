@@ -1,3 +1,5 @@
+const STACK_FRAMES_TO_IGNORE = 2
+
 export function interpolate(message: string, ...positionals: any[]): string {
   let index = 0
 
@@ -12,6 +14,14 @@ export class InvariantError extends Error {
     super(message)
     this.name = 'Invariant Violation'
     this.message = interpolate(message, ...positionals)
+
+    if (this.stack) {
+      const prevStack = this.stack
+      this.stack = prevStack
+        .split('\n')
+        .slice(STACK_FRAMES_TO_IGNORE)
+        .join('\n')
+    }
   }
 }
 
