@@ -1,5 +1,4 @@
-// @ts-ignore
-import { invariant, InvariantError } from './invariant.ts'
+import { InvariantError, invariant } from './invariant'
 
 it('does not throw any exceptions if the predicate is truthy', () => {
   expect(() => invariant(1, 'Error')).not.toThrow()
@@ -39,5 +38,5 @@ it('supports positional values in the error message', () => {
   // Objects.
   expect(() =>
     invariant(false, 'Cannot create user: %o', { name: 'John' })
-  ).toThrow(new InvariantError('Cannot create user: {"name":"John"}'))
+  ).toThrow(new InvariantError(`Cannot create user: { name: 'John' }`))
 })
