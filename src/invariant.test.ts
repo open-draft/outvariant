@@ -38,5 +38,5 @@ it('supports positional values in the error message', () => {
   // Objects.
   expect(() =>
     invariant(false, 'Cannot create user: %o', { name: 'John' })
-  ).toThrow(new InvariantError(`Cannot create user: { name: 'John' }`))
+  ).toThrow(new InvariantError(`Cannot create user: {"name":"John"}`))
 })

@@ -32,9 +32,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/open-draft/outvariant"
-  },
-  "dependencies": {
-    "@types/format-util": "^1.0.1",
-    "format-util": "^1.0.5"
   }
 }
