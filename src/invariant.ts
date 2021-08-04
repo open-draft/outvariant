@@ -1,4 +1,4 @@
-import format from 'format-util'
+import { format } from './format'
 
 const STACK_FRAMES_TO_IGNORE = 2
 
