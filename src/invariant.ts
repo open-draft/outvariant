@@ -9,11 +9,9 @@ export class InvariantError extends Error {
     this.message = format(message, ...positionals)
 
     if (this.stack) {
-      const prevStack = this.stack
-      this.stack = prevStack
-        .split('\n')
-        .slice(STACK_FRAMES_TO_IGNORE)
-        .join('\n')
+      const nextStack = this.stack.split('\n')
+      nextStack.splice(1, STACK_FRAMES_TO_IGNORE)
+      this.stack = nextStack.join('\n')
     }
   }
 }
