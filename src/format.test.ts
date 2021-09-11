@@ -61,3 +61,22 @@ it('formats an Array given as %o', () => {
 it('appends unresolved positionals to the string', () => {
   expect(format('hello %s', 'world', 'Jake', 32)).toEqual('hello world Jake 32')
 })
+
+it('respects new line characters in plain strings', () => {
+  expect(format('Hello\n%s\n\n%s', 'My', 'World')).toEqual('Hello\nMy\n\nWorld')
+})
+
+it('respects new lines in template literals', () => {
+  expect(
+    format(
+      `\
+Hello
+
+%s
+
+%s`,
+      'My',
+      'World'
+    )
+  ).toEqual('Hello\n\nMy\n\nWorld')
+})
