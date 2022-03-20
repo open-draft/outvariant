@@ -40,3 +40,47 @@ it('supports positional values in the error message', () => {
     invariant(false, 'Cannot create user: %o', { name: 'John' })
   ).toThrow(new InvariantError(`Cannot create user: {"name":"John"}`))
 })
+
+it('supports polymorphic error class using the "as" method', () => {
+  class CustomError extends Error {
+    name = 'CustomError'
+
+    constructor(public readonly message: string) {
+      super(message)
+      Object.setPrototypeOf(this, CustomError.prototype)
+    }
+  }
+
+  try {
+    invariant.as(CustomError, false, 'Hello %s', 'world')
+  } catch (error) {
+    expect(error).toBeInstanceOf(CustomError)
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toEqual('Hello world')
+  }
+})
+
+it('supports polymorphic error class with additional arguments', () => {
+  class NetworkError extends Error {
+    constructor(
+      public readonly errorCode: number,
+      public readonly message: string
+    ) {
+      super(message)
+      Object.setPrototypeOf(this, NetworkError.prototype)
+    }
+  }
+
+  try {
+    invariant.as(
+      (message) => new NetworkError(230, message),
+      false,
+      'Failed to handle %s',
+      'http://localhost:3000'
+    )
+  } catch (error) {
+    expect(error).toBeInstanceOf(NetworkError)
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toEqual('Failed to handle http://localhost:3000')
+  }
+})
