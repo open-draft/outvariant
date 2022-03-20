@@ -93,6 +93,54 @@ invariant(
 )
 ```
 
+## Polymorphic errors
+
+It is possible to throw a custom `Error` instance using `invariant.as`:
+
+```js
+import { invariant } from 'outvariant'
+
+class NetworkError extends Error {
+  constructor(message) {
+    super(message)
+  }
+}
+
+invariant.as(NetworkError, res.fulfilled, 'Failed to handle response')
+```
+
+Note that providing a custom error constructor as the argument to `invariant.as` requires the custom constructor's signature to be compatible with the `Error` class constructor.
+
+If your error constructor has a different signature, you can pass a function as the first argument to `invariant.as` that creates a new custom error instance.
+
+```js
+import { invariant } from 'outvariant'
+
+class NetworkError extends Error {
+  constructor(statusCode, message) {
+    super(message)
+    this.statusCode = statusCode
+  }
+}
+
+invariant.as(
+  (message) => new NetworkError(500, message),
+  res.fulfilled,
+  'Failed to handle response'
+)
+```
+
+Abstract the error into helper functions for flexibility:
+
+```js
+function toNetworkError(statusCode) {
+  return (message) => new NetworkError(statusCode, message)
+}
+
+invariant.as(toNetworkError(404), res?.user?.id, 'User Not Found')
+invariant.as(toNetworkError(500), res.fulfilled, 'Internal Server Error')
+```
+
 ## Contributing
 
 Please [open an issue](https://github.com/open-draft/outvariant/issues) or [submit a pull request](https://github.com/open-draft/outvariant/pulls) if you wish to contribute. Thank you.

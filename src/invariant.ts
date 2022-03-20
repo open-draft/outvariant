@@ -2,26 +2,83 @@ import { format } from './format'
 
 const STACK_FRAMES_TO_IGNORE = 2
 
-export class InvariantError extends Error {
-  constructor(message: string, ...positionals: any[]) {
-    super(message)
-    this.name = 'Invariant Violation'
-    this.message = format(message, ...positionals)
+/**
+ * Remove the "outvariant" package trace from the given error.
+ * This scopes down the error stack to the relevant parts
+ * when used in other applications.
+ */
+function cleanErrorStack(error: Error): void {
+  if (!error.stack) {
+    return
+  }
 
-    if (this.stack) {
-      const nextStack = this.stack.split('\n')
-      nextStack.splice(1, STACK_FRAMES_TO_IGNORE)
-      this.stack = nextStack.join('\n')
+  const nextStack = error.stack.split('\n')
+  nextStack.splice(1, STACK_FRAMES_TO_IGNORE)
+  error.stack = nextStack.join('\n')
+}
+
+export class InvariantError extends Error {
+  name = 'Invariant Violation'
+
+  constructor(public readonly message: string, ...positionals: any[]) {
+    super(message)
+    this.message = format(message, ...positionals)
+    cleanErrorStack(this)
+  }
+}
+
+export interface InvariantFunction {
+  (
+    predicate: unknown,
+    message: string,
+    ...positionals: unknown[]
+  ): asserts predicate
+}
+
+export interface CustomErrorConstructor {
+  new (message: string): Error
+}
+
+export interface CustomErrorFactory {
+  (message: string): Error
+}
+
+export type CustomError = CustomErrorConstructor | CustomErrorFactory
+
+export function createInvariantWith(
+  ErrorConstructor: CustomError
+): InvariantFunction {
+  const invariant: InvariantFunction = (predicate, message, ...positionals) => {
+    if (!predicate) {
+      const resolvedMessage = format(message, ...positionals)
+      const isConstructor = !!ErrorConstructor.prototype.name
+
+      const error: Error = isConstructor
+        ? // @ts-expect-error Construct/call signature too dynamic.
+          new ErrorConstructor(resolvedMessage)
+        : // @ts-expect-error Construct/call signature too dynamic.
+          ErrorConstructor(resolvedMessage)
+
+      cleanErrorStack(error)
+
+      throw error
     }
   }
+
+  return invariant
 }
 
-export function invariant<T>(
-  predicate: T,
-  message: string,
-  ...positionals: any[]
-): asserts predicate {
-  if (!predicate) {
-    throw new InvariantError(message, ...positionals)
-  }
+function polymorphicInvariant(
+  ErrorClass: CustomError,
+  ...args: Parameters<InvariantFunction>
+): ReturnType<InvariantFunction> {
+  return createInvariantWith(ErrorClass)(...args)
 }
+
+export const invariant = createInvariantWith(
+  InvariantError
+) as InvariantFunction & {
+  as: typeof polymorphicInvariant
+}
+
+invariant.as = polymorphicInvariant
