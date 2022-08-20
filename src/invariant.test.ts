@@ -8,9 +8,12 @@ it('does not throw any exceptions if the predicate is truthy', () => {
 })
 
 it('throws an exception if the predicate is falsy', () => {
-  expect(() => invariant(false, 'Error message')).toThrow(
-    new InvariantError('Error message')
-  )
+  expect(() => {
+    let value: string | undefined
+    invariant(value, 'Error message')
+    value.toUpperCase()
+  }).toThrow(new InvariantError('Error message'))
+
   expect(() => invariant(null, 'Error message')).toThrow(
     new InvariantError('Error message')
   )
@@ -52,7 +55,9 @@ it('supports polymorphic error class using the "as" method', () => {
   }
 
   try {
-    invariant.as(CustomError, false, 'Hello %s', 'world')
+    let value: number | undefined
+    invariant.as(CustomError, value, 'Hello %s', 'world')
+    value.toFixed()
   } catch (error) {
     expect(error).toBeInstanceOf(CustomError)
     expect(error).toBeInstanceOf(Error)
