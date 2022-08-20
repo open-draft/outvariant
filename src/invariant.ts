@@ -27,14 +27,6 @@ export class InvariantError extends Error {
   }
 }
 
-export interface InvariantFunction {
-  (
-    predicate: unknown,
-    message: string,
-    ...positionals: unknown[]
-  ): asserts predicate
-}
-
 export interface CustomErrorConstructor {
   new (message: string): Error
 }
@@ -45,40 +37,41 @@ export interface CustomErrorFactory {
 
 export type CustomError = CustomErrorConstructor | CustomErrorFactory
 
-export function createInvariantWith(
-  ErrorConstructor: CustomError
-): InvariantFunction {
-  const invariant: InvariantFunction = (predicate, message, ...positionals) => {
-    if (!predicate) {
-      const resolvedMessage = format(message, ...positionals)
-      const isConstructor = !!ErrorConstructor.prototype.name
+type Invariant = {
+  (
+    predicate: unknown,
+    message: string,
+    ...positionals: any[]
+  ): asserts predicate
 
-      const error: Error = isConstructor
-        ? // @ts-expect-error Construct/call signature too dynamic.
-          new ErrorConstructor(resolvedMessage)
-        : // @ts-expect-error Construct/call signature too dynamic.
-          ErrorConstructor(resolvedMessage)
+  as(
+    ErrorConstructor: CustomError,
+    predicate: unknown,
+    message: string,
+    ...positionals: unknown[]
+  ): asserts predicate
+}
 
-      cleanErrorStack(error)
-
-      throw error
-    }
+export const invariant: Invariant = (
+  predicate,
+  message,
+  ...positionals
+): asserts predicate => {
+  if (!predicate) {
+    throw new InvariantError(message, ...positionals)
   }
-
-  return invariant
 }
 
-function polymorphicInvariant(
-  ErrorClass: CustomError,
-  ...args: Parameters<InvariantFunction>
-): ReturnType<InvariantFunction> {
-  return createInvariantWith(ErrorClass)(...args)
-}
+invariant.as = (ErrorConstructor, predicate, message, ...positionals) => {
+  if (!predicate) {
+    const isConstructor = ErrorConstructor.prototype.name != null
 
-export const invariant = createInvariantWith(
-  InvariantError
-) as InvariantFunction & {
-  as: typeof polymorphicInvariant
-}
+    const error: Error = isConstructor
+      ? // @ts-ignore
+        new ErrorConstructor(format(message, positionals))
+      : // @ts-ignore
+        ErrorConstructor(format(message, positionals))
 
-invariant.as = polymorphicInvariant
+    throw error
+  }
+}
