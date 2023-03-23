@@ -550,16 +550,22 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@open-draft/deferred-promise@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@open-draft/deferred-promise/-/deferred-promise-2.1.0.tgz#4fb33ebdf5c05a0e47a26490ed9037ca36275a66"
+  integrity sha512-Rzd5JrXZX8zErHzgcGyngh4fmEbSHqTETdGj9rXtejlqMIgXFlyKBA7Jn1Xp0Ls0M0Y22+xHcWiEzbmdWl0BOA==
+
 "@open-draft/until@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-2.0.0.tgz#13d79bb827eb1be21cea4d29cdc60ca3312ec02f"
   integrity sha512-0zJhDjNR0aH1d68TiD6GnYr18dcuOiyTx8xV/I7fp9+z/VQ20e305aObW1/DO5/fiCOztscmvJsCjJDYDhFW6w==
 
-"@ossjs/release@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@ossjs/release/-/release-0.3.2.tgz#747a2963179701294b7dce3dca77ef41ffbd5449"
-  integrity sha512-mP6Qg1k+YnB3Y9Pb6DCU7+vr1UrI/lfUjww0OPnZzd7uXj9se/hS0c6DtiXuYm8ugYP9P/YyNDOlQCrh4MaV2Q==
+"@ossjs/release@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@ossjs/release/-/release-0.5.1.tgz#35b349022b311fee6ac9ad9a52395af11dafb7df"
+  integrity sha512-pp1VL1sOK7+E8rVRhnNvCcof0l8cN256dYLypLN0yOFqk9KxALZ9Rb5/Xft+PkHbsZyeca7SOEnuaWxAqJUt9g==
   dependencies:
+    "@open-draft/deferred-promise" "^2.1.0"
     "@open-draft/until" "^2.0.0"
     "@types/conventional-commits-parser" "^3.0.2"
     "@types/issue-parser" "^3.0.1"
