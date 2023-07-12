@@ -1,4 +1,4 @@
-const POSITIONALS_EXP = /(%?)(%([sdjo]))/g
+const POSITIONALS_EXP = /(%?)(%([sdijo]))/g
 
 function serializePositional(positional: any, flag: string): any {
   switch (flag) {
