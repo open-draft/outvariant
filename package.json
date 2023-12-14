@@ -1,6 +1,6 @@
 {
   "name": "outvariant",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Type-safe implementation of invariant with positionals.",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
