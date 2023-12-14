@@ -64,13 +64,14 @@ export const invariant: Invariant = (
 
 invariant.as = (ErrorConstructor, predicate, message, ...positionals) => {
   if (!predicate) {
-    const isConstructor = ErrorConstructor.prototype.name != null
+    const formatMessage = positionals.length === 0 ? message : format(message, positionals);
+    let error: Error;
 
-    const error: Error = isConstructor
-      ? // @ts-ignore
-        new ErrorConstructor(format(message, positionals))
-      : // @ts-ignore
-        ErrorConstructor(format(message, positionals))
+    try {
+      error = Reflect.construct(ErrorConstructor as CustomErrorConstructor, [formatMessage]);
+    } catch(err) {
+      error = (ErrorConstructor as CustomErrorFactory)(formatMessage);
+    }
 
     throw error
   }
