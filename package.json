@@ -31,7 +31,7 @@
     "positional"
   ],
   "devDependencies": {
-    "@ossjs/release": "^0.5.1",
+    "@ossjs/release": "^0.8.0",
     "@types/jest": "^26.0.23",
     "jest": "^27.0.6",
     "rimraf": "^3.0.2",
