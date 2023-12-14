@@ -2,7 +2,7 @@ import { format } from './format'
 
 it('does not format a string without positionals', () => {
   expect(format('hello world')).toEqual('hello world')
-  expect(format('%s hello %d %o world %j')).toEqual('%s hello %d %o world %j')
+  expect(format('%s hello %d %i %o world %j')).toEqual('%s hello %d %i %o world %j')
 })
 
 it('formats a single string (%s) positional', () => {
@@ -29,6 +29,17 @@ it('replaces invalid digits with NaN when formatting %d', () => {
   expect(format('%d', 'word')).toEqual('NaN')
   expect(format('I am %d years old', 'seven')).toEqual('I am NaN years old')
 })
+
+it('formats digit (%i) positionals', () => {
+  expect(format('%i', 32)).toEqual('32')
+  expect(format('I am %i years old', 18)).toEqual('I am 18 years old')
+})
+
+it('replaces invalid digits with NaN when formatting %i', () => {
+  expect(format('%i', 'word')).toEqual('NaN')
+  expect(format('I am %i years old', 'seven')).toEqual('I am NaN years old')
+})
+
 
 it('formats a JSON string (%j)', () => {
   expect(format('%j', 'hello')).toEqual(`"hello"`)
