@@ -15,32 +15,32 @@ it('throws an exception if the predicate is falsy', () => {
   }).toThrow(new InvariantError('Error message'))
 
   expect(() => invariant(null, 'Error message')).toThrow(
-    new InvariantError('Error message')
+    new InvariantError('Error message'),
   )
   expect(() => invariant(undefined, 'Error message')).toThrow(
-    new InvariantError('Error message')
+    new InvariantError('Error message'),
   )
 })
 
 it('supports positional values in the error message', () => {
   // Strings.
   expect(() => invariant(false, 'Cannot %s the %s', 'fetch', 'user')).toThrow(
-    new InvariantError('Cannot fetch the user')
+    new InvariantError('Cannot fetch the user'),
   )
 
   // Numbers.
   expect(() => invariant(false, 'Expected %d apples', 3)).toThrow(
-    new InvariantError('Expected 3 apples')
+    new InvariantError('Expected 3 apples'),
   )
 
   // Booleans.
   expect(() => invariant(false, 'Expected %s but got %s', true, false)).toThrow(
-    new InvariantError('Expected true but got false')
+    new InvariantError('Expected true but got false'),
   )
 
   // Objects.
   expect(() =>
-    invariant(false, 'Cannot create user: %o', { name: 'John' })
+    invariant(false, 'Cannot create user: %o', { name: 'John' }),
   ).toThrow(new InvariantError(`Cannot create user: {"name":"John"}`))
 })
 
@@ -69,7 +69,7 @@ it('supports polymorphic error class with additional arguments', () => {
   class NetworkError extends Error {
     constructor(
       public readonly errorCode: number,
-      public readonly message: string
+      public readonly message: string,
     ) {
       super(message)
       Object.setPrototypeOf(this, NetworkError.prototype)
@@ -81,11 +81,28 @@ it('supports polymorphic error class with additional arguments', () => {
       (message) => new NetworkError(230, message),
       false,
       'Failed to handle %s',
-      'http://localhost:3000'
+      'http://localhost:3000',
     )
   } catch (error) {
     expect(error).toBeInstanceOf(NetworkError)
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toEqual('Failed to handle http://localhost:3000')
+  }
+})
+
+it('supports polymorphic error class with multiple positionals', () => {
+  class MyError extends Error {
+    constructor(message?: string) {
+      super(message)
+      Object.setPrototypeOf(this, MyError.prototype)
+    }
+  }
+
+  try {
+    invariant.as(MyError, false, 'Cannot %s the %s', 'fetch', 'user')
+  } catch (error) {
+    expect(error).toBeInstanceOf(MyError)
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toBe('Cannot fetch the user')
   }
 })
