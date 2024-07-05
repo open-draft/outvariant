@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "ES5",
+    "target": "es6",
     "outDir": "lib",
     "declaration": true,
     "declarationDir": "lib",

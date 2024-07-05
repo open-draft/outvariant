@@ -18,30 +18,40 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_RELEASE_TOKEN }}
 
-      - name: Setup Git
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          always-auth: true
+          registry-url: https://registry.npmjs.org
+
+      - name: Set up Git
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
 
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
         with:
-          useLockFile: false
+          version: 8.15
 
-      - name: Test the library
-        run: yarn test
+      - name: Install dependencies
+        run: pnpm install
 
-      - name: Build the library
-        run: yarn build
+      - name: Tests
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
 
       - name: Publish
         if: github.ref == 'refs/heads/main'
-        run: yarn release
+        run: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}

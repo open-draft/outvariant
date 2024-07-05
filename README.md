@@ -52,8 +52,6 @@ Using `invariant` reduces the visual nesting of the code and leads to cleaner er
 
 ```sh
 npm install outvariant
-# or
-yarn add outvariant
 ```
 
 > You may want to install this library as a dev dependency (`-D`) based on your usage.
@@ -89,7 +87,7 @@ invariant(
   'firstName',
   {
     id: 1,
-  }
+  },
 )
 ```
 
@@ -126,7 +124,7 @@ class NetworkError extends Error {
 invariant.as(
   (message) => new NetworkError(500, message),
   res.fulfilled,
-  'Failed to handle response'
+  'Failed to handle response',
 )
 ```
 

@@ -46,10 +46,9 @@ it('supports positional values in the error message', () => {
 
 it('supports polymorphic error class using the "as" method', () => {
   class CustomError extends Error {
-    name = 'CustomError'
-
     constructor(public readonly message: string) {
       super(message)
+      this.name = 'CustomError'
       Object.setPrototypeOf(this, CustomError.prototype)
     }
   }
@@ -59,9 +58,13 @@ it('supports polymorphic error class using the "as" method', () => {
     invariant.as(CustomError, value, 'Hello %s', 'world')
     value.toFixed()
   } catch (error) {
-    expect(error).toBeInstanceOf(CustomError)
-    expect(error).toBeInstanceOf(Error)
-    expect(error.message).toEqual('Hello world')
+    if (error instanceof Error) {
+      expect(error).toBeInstanceOf(CustomError)
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toEqual('Hello world')
+    } else {
+      throw error
+    }
   }
 })
 
@@ -84,9 +87,13 @@ it('supports polymorphic error class with additional arguments', () => {
       'http://localhost:3000',
     )
   } catch (error) {
-    expect(error).toBeInstanceOf(NetworkError)
-    expect(error).toBeInstanceOf(Error)
-    expect(error.message).toEqual('Failed to handle http://localhost:3000')
+    if (error instanceof Error) {
+      expect(error).toBeInstanceOf(NetworkError)
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toEqual('Failed to handle http://localhost:3000')
+    } else {
+      throw error
+    }
   }
 })
 
@@ -101,8 +108,12 @@ it('supports polymorphic error class with multiple positionals', () => {
   try {
     invariant.as(MyError, false, 'Cannot %s the %s', 'fetch', 'user')
   } catch (error) {
-    expect(error).toBeInstanceOf(MyError)
-    expect(error).toBeInstanceOf(Error)
-    expect(error.message).toBe('Cannot fetch the user')
+    if (error instanceof Error) {
+      expect(error).toBeInstanceOf(MyError)
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toBe('Cannot fetch the user')
+    } else {
+      throw error
+    }
   }
 })
