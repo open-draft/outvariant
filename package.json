@@ -16,9 +16,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "clean": "rimraf ./lib",
-    "build": "yarn clean && tsup",
-    "prepublishOnly": "yarn test && yarn build",
+    "build": "tsup",
+    "prepublishOnly": "pnpm test && pnpm build",
     "release": "release publish"
   },
   "files": [
@@ -32,9 +31,9 @@
   ],
   "devDependencies": {
     "@ossjs/release": "^0.8.0",
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^18.0.0",
     "jest": "^27.0.6",
-    "rimraf": "^3.0.2",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
     "tsup": "^6.2.3",
